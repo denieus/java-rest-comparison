@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: com.okta.rest
+---
+testFramework: junit
+sourceLanguage: java

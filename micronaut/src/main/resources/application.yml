@@ -1,0 +1,20 @@
+micronaut:
+  application:
+    name: micronaut
+  security:
+    enabled: true
+    oauth2:
+      enabled: true
+      clients:
+        okta:
+          openid:
+            issuer: https://{yourOktaDomain}/oauth2/default
+    token:
+      jwt:
+        enabled: true
+        cookie:
+          enabled: true
+        signatures:
+          jwks:
+            okta:
+              url: https://{yourOktaDomain}/oauth2/default/v1/keys
