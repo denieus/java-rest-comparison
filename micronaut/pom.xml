@@ -4,8 +4,8 @@
   <artifactId>micronaut</artifactId>
   <version>0.1</version>
   <properties>
-    <micronaut.version>1.2.7</micronaut.version>
-    <jdk.version>1.8</jdk.version>
+    <micronaut.version>1.2.8</micronaut.version>
+    <jdk.version>11</jdk.version>
     <maven.compiler.target>${jdk.version}</maven.compiler.target>
     <maven.compiler.source>${jdk.version}</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,6 +48,11 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-http-server-netty</artifactId>
       <scope>compile</scope>
@@ -58,22 +63,22 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>io.micronaut.configuration</groupId>
-      <artifactId>micronaut-security-oauth2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.micronaut</groupId>
-      <artifactId>micronaut-security</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.micronaut</groupId>
-      <artifactId>micronaut-security-jwt</artifactId>
-    </dependency>
-    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.3</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.micronaut.configuration</groupId>
+        <artifactId>micronaut-security-oauth2</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.micronaut</groupId>
+        <artifactId>micronaut-security</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.micronaut</groupId>
+        <artifactId>micronaut-security-jwt</artifactId>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -123,9 +128,12 @@
           <arguments>
             <argument>-classpath</argument>
             <classpath/>
-            <argument>-noverify</argument>
+                                                <argument>-noverify</argument>
             <argument>-XX:TieredStopAtLevel=1</argument>
             <argument>-Dcom.sun.management.jmxremote</argument>
+            
+            
+            
             <argument>${exec.mainClass}</argument>
           </arguments>
         </configuration>
@@ -169,12 +177,12 @@
                   <path>
                     <groupId>io.micronaut</groupId>
                     <artifactId>micronaut-inject-java</artifactId>
-                    <version>1.2.7</version>
+                    <version>1.2.8</version>
                   </path>
                   <path>
                     <groupId>io.micronaut</groupId>
                     <artifactId>micronaut-validation</artifactId>
-                    <version>1.2.7</version>
+                    <version>1.2.8</version>
                   </path>
             </annotationProcessorPaths>
           </configuration>
@@ -192,12 +200,12 @@
                   <path>
                     <groupId>io.micronaut</groupId>
                     <artifactId>micronaut-inject-java</artifactId>
-                    <version>1.2.7</version>
+                    <version>1.2.8</version>
                   </path>
                   <path>
                     <groupId>io.micronaut</groupId>
                     <artifactId>micronaut-validation</artifactId>
-                    <version>1.2.7</version>
+                    <version>1.2.8</version>
                   </path>
                 </annotationProcessorPaths>
               </configuration>

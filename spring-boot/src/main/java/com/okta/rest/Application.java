@@ -1,4 +1,4 @@
-package com.okta.rest.springboot;
+package com.okta.rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
