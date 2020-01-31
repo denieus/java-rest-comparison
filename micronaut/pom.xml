@@ -69,10 +69,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-        <groupId>io.micronaut.configuration</groupId>
-        <artifactId>micronaut-security-oauth2</artifactId>
-    </dependency>
-    <dependency>
         <groupId>io.micronaut</groupId>
         <artifactId>micronaut-security</artifactId>
     </dependency>
@@ -131,9 +127,9 @@
                                                 <argument>-noverify</argument>
             <argument>-XX:TieredStopAtLevel=1</argument>
             <argument>-Dcom.sun.management.jmxremote</argument>
-            
-            
-            
+
+
+
             <argument>${exec.mainClass}</argument>
           </arguments>
         </configuration>
