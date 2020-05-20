@@ -37,7 +37,7 @@ Add security libraries to `pom.xml`. [`mn-security`]
 </dependency>
 ----
 
-Create `HelloController.java`. [`mn-hello`]
+Create `controller/HelloController.java`. [`mn-hello`]
 
 [source,java]
 ----
@@ -83,7 +83,7 @@ Run the following command to create an Okta account, or https://developer.okta.c
 mvn com.okta:okta-maven-plugin:setup
 ----
 
-Add `https://oidcdebugger.com/debug` as a login redirect URI to your app. Test on <https://oidcdebugger.com>.
+Add `\https://oidcdebugger.com/debug` as a login redirect URI to your app. Test on <https://oidcdebugger.com>.
 
 === Run Your Micronaut REST API
 
@@ -113,7 +113,7 @@ Use the token to access the API.
 
 ----
 curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
-# http Authorization:"Bearer $TOKEN" :8080/hello
+# http :8080/hello "Authorization:Bearer $TOKEN"
 ----
 
 === Create a Java REST API with Quarkus
@@ -254,13 +254,13 @@ http Authorization:"Bearer $TOKEN" :8080/hello
 
 == Compare Startup Times
 
+Make sure to `killall java` before running each command!
+
 - Micronaut: `./mvnw compile exec:exec`
 - Quarkus: `./mvnw compile quarkus:dev`
 - Spring Boot: `./mvnw spring-boot:run`
 
 == Java has Awesome Options for REST APIs
-
-Compare startup times.
 
 ⚡️ Find the code on GitHub: https://github.com/oktadeveloper/okta-java-rest-api-comparison-example[@oktadeveloper/okta-java-rest-api-comparison-example].
 
