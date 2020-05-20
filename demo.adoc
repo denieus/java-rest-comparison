@@ -15,16 +15,16 @@ toc::[]
 
 === Create a Micronaut App
 
-Install Micronaut using https://sdkman.io/[SDKMAN!]
-
+. Install Micronaut using https://sdkman.io/[SDKMAN!]
++
 [source,shell]
 ----
 sdk install micronaut
 mn create-app com.okta.rest.micronaut --build maven
 ----
 
-Add security libraries to `pom.xml`. [`mn-security`]
-
+. Add security libraries to `pom.xml`. [`mn-security`]
++
 [source,xml]
 ----
 <dependency>
@@ -37,8 +37,8 @@ Add security libraries to `pom.xml`. [`mn-security`]
 </dependency>
 ----
 
-Create `controller/HelloController.java`. [`mn-hello`]
-
+. Create `controller/HelloController.java`. [`mn-hello`]
++
 [source,java]
 ----
 package com.okta.rest.controller;
@@ -65,8 +65,8 @@ public class HelloController {
 }
 ----
 
-Rename `application.yml` to `application.properties` and add security configuration. [`mn-properties`]
-
+. Rename `application.yml` to `application.properties` and add security configuration. [`mn-properties`]
++
 [source,properties]
 ----
 micronaut.security.enabled=true
@@ -76,26 +76,26 @@ micronaut.security.token.jwt.signatures.jwks.okta.url=https://{yourOktaDomain}/o
 
 === Create an OIDC App on Okta
 
-Run the following command to create an Okta account, or https://developer.okta.com/signup/[signup through your browser].
-
+. Run the https://github.com/oktadeveloper/okta-maven-plugin[Okta Maven Plugin] to create an Okta account, or https://developer.okta.com/signup/[signup through your browser].
++
 [source,shell]
 ----
 mvn com.okta:okta-maven-plugin:setup
 ----
 
-Add `\https://oidcdebugger.com/debug` as a login redirect URI to your app. Test on <https://oidcdebugger.com>.
+. Add `\https://oidcdebugger.com/debug` as a login redirect URI to your app. Test on <https://oidcdebugger.com>.
 
 === Run Your Micronaut REST API
 
-Start your app.
-
+. Start your app.
++
 [source,shell]
 ----
 ./mvnw compile exec:exec
 ----
 
-Test it from your terminal.
-
+. Test it from your terminal.
++
 [source,shell]
 ----
 curl -X GET -I http://localhost:8080/hello
@@ -103,14 +103,14 @@ curl -X GET -I http://localhost:8080/hello
 # http :8080/hello
 ----
 
-Set token environment variable from OIDC Debugger.
-
+. Set token environment variable from OIDC Debugger.
++
 ----
 TOKEN=eyJraWQiOiJxOE1QMjFNNHZCVmxOSkxGbFFWNlN...
 ----
 
-Use the token to access the API.
-
+. Use the token to access your API.
++
 ----
 curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
 # http :8080/hello "Authorization:Bearer $TOKEN"
@@ -118,8 +118,8 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
 
 === Create a Java REST API with Quarkus
 
-Use Maven to create a new Quarkus project.
-
+. Use Maven to create a new Quarkus project.
++
 [source,shell]
 ----
 mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
@@ -130,10 +130,8 @@ mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
     -Dextensions="jwt"
 ----
 
-// https://quarkus.io/guides/getting-started
-
-Create a `HelloResource.java` class that returns user information. [`qk-hello`]
-
+. Create a `HelloResource.java` class that returns user information. [`qk-hello`]
++
 [source,java]
 ----
 package com.okta.rest.quarkus;
@@ -163,38 +161,38 @@ public class HelloResource {
 }
 ----
 
-Configure MicroProfile's JWT support in `application.properties`. [`qk-properties`]
-
+. Configure MicroProfile's JWT support in `application.properties`. [`qk-properties`]
++
 [source,properties]
 ----
 mp.jwt.verify.publickey.location=https://{yourOktaDomain}/oauth2/default/v1/keys
 mp.jwt.verify.issuer=https://{yourOktaDomain}/oauth2/default
 ----
 
-Run your Quarkus app:
-
+. Run your Quarkus app:
++
 [source,shell]
 ----
 ./mvnw compile quarkus:dev
 ----
 
-Test it from your terminal.
-
+. Test it from your terminal.
++
 [source,shell]
 ----
 http :8080/hello
 ----
 
-Test with access token.
-
+. Test with access token.
++
 ----
 http Authorization:"Bearer $TOKEN" :8080/hello
 ----
 
 === Create a Java REST API with Spring Boot
 
-Use https://httpie.org[HTTPie] to create a Spring Boot project with Spring MVC and Okta.
-
+. Use https://httpie.org[HTTPie] to create a Spring Boot project with Spring Boot and Okta.
++
 [source,shell]
 ----
 http https://start.spring.io/starter.zip language==java \
@@ -202,8 +200,8 @@ http https://start.spring.io/starter.zip language==java \
  name==spring-boot baseDir==spring-boot | tar -xzvf -
 ----
 
-Create a `controller` package and `HelloController` in it. [`sb-hello`]
-
+. Create a `controller` package and `HelloController` in it. [`sb-hello`]
++
 [source,java]
 ----
 package com.okta.rest.controller;
@@ -225,36 +223,39 @@ public class HelloController {
 }
 ----
 
-Add Okta issuer to `application.properties`.
-
+. Add Okta issuer to `application.properties`.
++
 [source,properties]
 ----
 okta.oauth2.issuer=https://{yourOktaDomain}/oauth2/default
 ----
 
-Run your Spring Boot app:
-
+. Run your Spring Boot app:
++
 [source,shell]
 ----
 ./mvnw spring-boot:run
 ----
 
-Show access denied terminal.
-
+. Show access denied terminal.
++
 [source,shell]
 ----
 http :8080/hello
 ----
 
-Test your API with an access token.
-
+6. Test your API with an access token.
++
 ----
 http Authorization:"Bearer $TOKEN" :8080/hello
 ----
 
 == Compare Startup Times
 
-Make sure to `killall java` before running each command!
+. Package each application with `./mvnw package`
+. Run with `java -jar target/*.jar`
+
+You can run them manually, but these goals are not optimized for speed.
 
 - Micronaut: `./mvnw compile exec:exec`
 - Quarkus: `./mvnw compile quarkus:dev`
