@@ -1,6 +1,6 @@
 # Java REST API Showdown: A Comparison Among The Best Frameworks In The Market
 
-This example shows how to use Okta's Authentication API with Java integrating with Kafka.
+This example shows how to create Java REST APIs with Micronaut, Quarkus, and Spring Boot.
 
 Please read [Java REST API Showdown: A Comparison Among The Best Frameworks In The Market](https://developer.okta.com/blog/2020/01/09/java-rest-api-showdown) for a tutorial that shows you how to build each application.
 
