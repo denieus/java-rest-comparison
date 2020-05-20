@@ -7,13 +7,13 @@
 
 In this demo, I'll show how to create a REST API with Micronaut, Quarkus, and Spring Boot. It'll be simple, and it'll also be secure! 😃
 
-**Prerequisites:** https://adoptopenjdk.net/[Java 8]+ and http://maven.apache.org/[Maven].ss
+**Prerequisites:** https://adoptopenjdk.net/[Java 8]+ and http://maven.apache.org/[Maven].
 
 TIP: The brackets at the end of some steps indicate the IntelliJ Live Templates to use. You can find the template definitions at https://github.com/mraible/idea-live-templates[mraible/idea-live-templates].
 
 toc::[]
 
-=== Create a Micronaut App 
+=== Create a Micronaut App
 
 Install Micronaut using https://sdkman.io/[SDKMAN!]
 
@@ -23,7 +23,7 @@ sdk install micronaut
 mn create-app com.okta.rest.micronaut --build maven
 ----
 
-Add security libraries to `pom.xml`.
+Add security libraries to `pom.xml`. [`mn-security`]
 
 [source,xml]
 ----
@@ -65,7 +65,7 @@ public class HelloController {
 }
 ----
 
-Rename `application.yml` to `application.properties` and add security configuration.
+Rename `application.yml` to `application.properties` and add security configuration. [`mn-properties`]
 
 [source,properties]
 ----
@@ -85,7 +85,7 @@ mvn com.okta:okta-maven-plugin:setup
 
 Add `https://oidcdebugger.com/debug` as a login redirect URI to your app. Test on <https://oidcdebugger.com>.
 
-=== Run Your Micronaut REST API 
+=== Run Your Micronaut REST API
 
 Start your app.
 
@@ -101,7 +101,7 @@ Test it from your terminal.
 curl -X GET -I http://localhost:8080/hello
 # or better yet, using httpie.org
 # http :8080/hello
----
+----
 
 Set token environment variable from OIDC Debugger.
 
@@ -118,14 +118,24 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
 
 === Create a Java REST API with Quarkus
 
-mvn io.quarkus:quarkus-maven-plugin:1.1.1.Final:create \
+Use Maven to create a new Quarkus project.
+
+[source,shell]
+----
+mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
     -DprojectGroupId=com.okta.rest \
     -DprojectArtifactId=quarkus \
     -DclassName="com.okta.rest.quarkus.HelloResource" \
     -Dpath="/hello" \
     -Dextensions="jwt"
+----
 
+// https://quarkus.io/guides/getting-started
 
+Create a `HelloResource.java` class that returns user information. [`qk-hello`]
+
+[source,java]
+----
 package com.okta.rest.quarkus;
 
 import io.quarkus.security.Authenticated;
@@ -151,31 +161,51 @@ public class HelloResource {
     }
 
 }
+----
 
+Configure MicroProfile's JWT support in `application.properties`. [`qk-properties`]
 
+[source,properties]
+----
 mp.jwt.verify.publickey.location=https://{yourOktaDomain}/oauth2/default/v1/keys
 mp.jwt.verify.issuer=https://{yourOktaDomain}/oauth2/default
+----
 
+Run your Quarkus app:
+
+[source,shell]
+----
 ./mvnw compile quarkus:dev
+----
 
+Test it from your terminal.
 
-curl -X GET -I http://localhost:8080/hello
+[source,shell]
+----
+http :8080/hello
+----
 
+Test with access token.
 
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
-
+----
+http Authorization:"Bearer $TOKEN" :8080/hello
+----
 
 === Create a Java REST API with Spring Boot
 
-curl https://start.spring.io/starter.zip -d language=java \
- -d dependencies=web,okta \
- -d packageName=com.okta.rest \
- -d name=spring-boot \
- -d type=maven-project \
- -o spring-boot.zip
+Use https://httpie.org[HTTPie] to create a Spring Boot project with Spring MVC and Okta.
 
-unzip spring-boot.zip -d spring-boot
+[source,shell]
+----
+http https://start.spring.io/starter.zip language==java \
+ dependencies==web,okta packageName==com.okta.rest \
+ name==spring-boot baseDir==spring-boot | tar -xzvf -
+----
 
+Create a `controller` package and `HelloController` in it. [`sb-hello`]
+
+[source,java]
+----
 package com.okta.rest.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -193,14 +223,47 @@ public class HelloController {
     }
 
 }
+----
 
+Add Okta issuer to `application.properties`.
+
+[source,properties]
+----
 okta.oauth2.issuer=https://{yourOktaDomain}/oauth2/default
+----
 
+Run your Spring Boot app:
+
+[source,shell]
+----
 ./mvnw spring-boot:run
+----
 
-curl -X GET -I http://localhost:8080/hello
+Show access denied terminal.
 
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
+[source,shell]
+----
+http :8080/hello
+----
+
+Test your API with an access token.
+
+----
+http Authorization:"Bearer $TOKEN" :8080/hello
+----
+
+== Compare Startup Times
+
+- Micronaut: `./mvnw compile exec:exec`
+- Quarkus: `./mvnw compile quarkus:dev`
+- Spring Boot: `./mvnw spring-boot:run`
+
+== Java has Awesome Options for REST APIs
+
+Compare startup times.
+
+⚡️ Find the code on GitHub: https://github.com/oktadeveloper/okta-java-rest-api-comparison-example[@oktadeveloper/okta-java-rest-api-comparison-example].
+
+👀 Read the blog post: https://developer.okta.com/blog/2020/01/09/java-rest-api-showdown[Java REST API Showdown: Which is the Best Framework on the Market?].
 
 
-https://developer.okta.com/blog/2020/01/09/java-rest-api-showdown
