@@ -1,0 +1,206 @@
+:experimental:
+// Define unicode for Apple Command key.
+:commandkey: &#8984;
+:toc: macro
+
+== Java REST API Showdown Demo Steps
+
+In this demo, I'll show how to create a REST API with Micronaut, Quarkus, and Spring Boot. It'll be simple, and it'll also be secure! 😃
+
+**Prerequisites:** https://adoptopenjdk.net/[Java 8]+ and http://maven.apache.org/[Maven].ss
+
+TIP: The brackets at the end of some steps indicate the IntelliJ Live Templates to use. You can find the template definitions at https://github.com/mraible/idea-live-templates[mraible/idea-live-templates].
+
+toc::[]
+
+=== Create a Micronaut App 
+
+Install Micronaut using https://sdkman.io/[SDKMAN!]
+
+[source,shell]
+----
+sdk install micronaut
+mn create-app com.okta.rest.micronaut --build maven
+----
+
+Add security libraries to `pom.xml`.
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.micronaut</groupId>
+    <artifactId>micronaut-security</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.micronaut</groupId>
+    <artifactId>micronaut-security-jwt</artifactId>
+</dependency>
+----
+
+Create `HelloController.java`. [`mn-hello`]
+
+[source,java]
+----
+package com.okta.rest.controller;
+
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Produces;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
+
+import java.security.Principal;
+
+@Controller("/hello")
+public class HelloController {
+
+    @Get
+    @Secured(SecurityRule.IS_AUTHENTICATED)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello(Principal principal) {
+        return "Hello, " + principal.getName() + "!";
+    }
+
+}
+----
+
+Rename `application.yml` to `application.properties` and add security configuration.
+
+[source,properties]
+----
+micronaut.security.enabled=true
+micronaut.security.token.jwt.enabled=true
+micronaut.security.token.jwt.signatures.jwks.okta.url=https://{yourOktaDomain}/oauth2/default/v1/keys
+----
+
+=== Create an OIDC App on Okta
+
+Run the following command to create an Okta account, or https://developer.okta.com/signup/[signup through your browser].
+
+[source,shell]
+----
+mvn com.okta:okta-maven-plugin:setup
+----
+
+Add `https://oidcdebugger.com/debug` as a login redirect URI to your app. Test on <https://oidcdebugger.com>.
+
+=== Run Your Micronaut REST API 
+
+Start your app.
+
+[source,shell]
+----
+./mvnw compile exec:exec
+----
+
+Test it from your terminal.
+
+[source,shell]
+----
+curl -X GET -I http://localhost:8080/hello
+# or better yet, using httpie.org
+# http :8080/hello
+---
+
+Set token environment variable from OIDC Debugger.
+
+----
+TOKEN=eyJraWQiOiJxOE1QMjFNNHZCVmxOSkxGbFFWNlN...
+----
+
+Use the token to access the API.
+
+----
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
+# http Authorization:"Bearer $TOKEN" :8080/hello
+----
+
+=== Create a Java REST API with Quarkus
+
+mvn io.quarkus:quarkus-maven-plugin:1.1.1.Final:create \
+    -DprojectGroupId=com.okta.rest \
+    -DprojectArtifactId=quarkus \
+    -DclassName="com.okta.rest.quarkus.HelloResource" \
+    -Dpath="/hello" \
+    -Dextensions="jwt"
+
+
+package com.okta.rest.quarkus;
+
+import io.quarkus.security.Authenticated;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
+import java.security.Principal;
+
+@Path("/hello")
+public class HelloResource {
+
+    @GET
+    @Path("/")
+    @Authenticated
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello(@Context SecurityContext context) {
+        Principal userPrincipal = context.getUserPrincipal();
+        return "Hello, " + userPrincipal.getName() + "!";
+    }
+
+}
+
+
+mp.jwt.verify.publickey.location=https://{yourOktaDomain}/oauth2/default/v1/keys
+mp.jwt.verify.issuer=https://{yourOktaDomain}/oauth2/default
+
+./mvnw compile quarkus:dev
+
+
+curl -X GET -I http://localhost:8080/hello
+
+
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
+
+
+=== Create a Java REST API with Spring Boot
+
+curl https://start.spring.io/starter.zip -d language=java \
+ -d dependencies=web,okta \
+ -d packageName=com.okta.rest \
+ -d name=spring-boot \
+ -d type=maven-project \
+ -o spring-boot.zip
+
+unzip spring-boot.zip -d spring-boot
+
+package com.okta.rest.controller;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
+
+@RestController
+public class HelloController {
+
+    @GetMapping("/hello")
+    public String hello(@AuthenticationPrincipal Principal principal) {
+        return "Hello, " + principal.getName() + "!";
+    }
+
+}
+
+okta.oauth2.issuer=https://{yourOktaDomain}/oauth2/default
+
+./mvnw spring-boot:run
+
+curl -X GET -I http://localhost:8080/hello
+
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
+
+
+https://developer.okta.com/blog/2020/01/09/java-rest-api-showdown
