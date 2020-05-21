@@ -261,6 +261,12 @@ You can run them manually, but these goals are not optimized for speed.
 - Quarkus: `./mvnw compile quarkus:dev`
 - Spring Boot: `./mvnw spring-boot:run`
 
+What about GraalVM?
+
+- Micronaut: 12ms according to https://guides.micronaut.io/micronaut-creating-first-graal-app/guide/index.html[Creating your first Micronaut Graal application].
+- Quarkus: 14ms according to https://www.infoq.com/presentations/quarkus-graalvm-sao-paulo-2019/[Quarkus and GraalVM: Booting Hibernate at Supersonic Speed, Subatomic Size] on InfoQ. https://quarkus.io/guides/building-native-image[Quarkus docs] don't list a startup time.
+- Spring Boot: 44ms according to https://spring.io/blog/2020/04/09/spring-graal-native-0-6-0-released[Spring Graal Native 0.6.0 released].
+
 == Java has Awesome Options for REST APIs
 
 ⚡️ Find the code on GitHub: https://github.com/oktadeveloper/okta-java-rest-api-comparison-example[@oktadeveloper/okta-java-rest-api-comparison-example].
