@@ -23,10 +23,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.okta.spring</groupId>
             <artifactId>okta-spring-boot-starter</artifactId>
             <version>1.4.0</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.experimental</groupId>
@@ -53,12 +65,12 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <image>
-                        <builder>paketobuildpacks/builder:tiny</builder>
                         <env>
                             <BP_BOOT_NATIVE_IMAGE>1</BP_BOOT_NATIVE_IMAGE>
                             <BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
                                 -Dspring.native.remove-yaml-support=true
                                 -Dspring.spel.ignore=true
+                                --enable-https
                             </BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
                         </env>
                     </image>
