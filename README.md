@@ -39,7 +39,7 @@ Paste the value of `{yourOktaDomain}` into the following files:
 
 To start each application you can use the commands below:
 
-* Micronaut: `./mvnw compile exec:exec`
+* Micronaut: `./mvnw mn:run`
 * Quarkus: `./mvnw compile quarkus:dev`
 * Spring Boot: `./mvnw spring-boot:run`
 
