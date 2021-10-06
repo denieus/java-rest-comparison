@@ -7,7 +7,7 @@
 
 In this demo, I'll show how to create a REST API with Micronaut, Quarkus, and Spring Boot. It'll be simple, and it'll also be secure! 😃
 
-**Prerequisites:** https://adoptopenjdk.net/[Java 8]+ and http://maven.apache.org/[Maven].
+**Prerequisites:** https://adoptium.net/[Java 11]+ and http://maven.apache.org/[Maven].
 
 TIP: The brackets at the end of some steps indicate the IntelliJ Live Templates to use. You can find the template definitions at https://github.com/mraible/idea-live-templates[mraible/idea-live-templates].
 
@@ -28,11 +28,11 @@ mn create-app com.okta.rest.micronaut --build maven
 [source,xml]
 ----
 <dependency>
-    <groupId>io.micronaut</groupId>
+    <groupId>io.micronaut.security</groupId>
     <artifactId>micronaut-security</artifactId>
 </dependency>
 <dependency>
-    <groupId>io.micronaut</groupId>
+    <groupId>io.micronaut.security</groupId>
     <artifactId>micronaut-security-jwt</artifactId>
 </dependency>
 ----
@@ -76,7 +76,7 @@ micronaut.security.token.jwt.signatures.jwks.okta.url=https://{yourOktaDomain}/o
 
 === Create an OIDC App on Okta
 
-. Run the https://github.com/oktadeveloper/okta-maven-plugin[Okta Maven Plugin] to create an Okta account, or https://developer.okta.com/signup/[signup through your browser].
+. Run the https://github.com/oktadev/okta-maven-plugin[Okta Maven Plugin] to create an Okta account, or https://developer.okta.com/signup/[signup through your browser].
 +
 [source,shell]
 ----
@@ -91,7 +91,7 @@ mvn com.okta:okta-maven-plugin:setup
 +
 [source,shell]
 ----
-./mvnw compile exec:exec
+./mvnw mn:run
 ----
 
 . Test it from your terminal.
@@ -122,12 +122,12 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/hello
 +
 [source,shell]
 ----
-mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
+mvn io.quarkus:quarkus-maven-plugin:2.3.0.Final:create \
     -DprojectGroupId=com.okta.rest \
     -DprojectArtifactId=quarkus \
     -DclassName="com.okta.rest.quarkus.HelloResource" \
     -Dpath="/hello" \
-    -Dextensions="jwt"
+    -Dextensions="smallrye-jwt"
 ----
 
 . Create a `HelloResource.java` class that returns user information. [`qk-hello`]
@@ -206,7 +206,6 @@ http https://start.spring.io/starter.zip language==java \
 ----
 package com.okta.rest.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -216,7 +215,7 @@ import java.security.Principal;
 public class HelloController {
 
     @GetMapping("/hello")
-    public String hello(@AuthenticationPrincipal Principal principal) {
+    public String hello(Principal principal) {
         return "Hello, " + principal.getName() + "!";
     }
 
@@ -244,7 +243,7 @@ okta.oauth2.issuer=https://{yourOktaDomain}/oauth2/default
 http :8080/hello
 ----
 
-6. Test your API with an access token.
+. Test your API with an access token.
 +
 ----
 http Authorization:"Bearer $TOKEN" :8080/hello
@@ -254,10 +253,11 @@ http Authorization:"Bearer $TOKEN" :8080/hello
 
 . Package each application with `./mvnw package`
 . Run with `java -jar target/*.jar`
+. For Quarkus, use `java -jar target/quarkus-app/*.jar`
 
 You can run them manually, but these goals are not optimized for speed.
 
-- Micronaut: `./mvnw compile exec:exec`
+- Micronaut: `./mvnw mn:run`
 - Quarkus: `./mvnw compile quarkus:dev`
 - Spring Boot: `./mvnw spring-boot:run`
 
@@ -269,7 +269,7 @@ What about GraalVM?
 
 == Java has Awesome Options for REST APIs
 
-⚡️ Find the code on GitHub: https://github.com/oktadeveloper/okta-java-rest-api-comparison-example[@oktadeveloper/okta-java-rest-api-comparison-example].
+⚡️ Find the code on GitHub: https://github.com/oktadev/okta-java-rest-api-comparison-example[@oktadeveloper/okta-java-rest-api-comparison-example].
 
 👀 Read the blog post: https://developer.okta.com/blog/2020/01/09/java-rest-api-showdown[Java REST API Showdown: Which is the Best Framework on the Market?].
 
