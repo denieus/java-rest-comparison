@@ -6,7 +6,7 @@ Please read [Java REST API Showdown: A Comparison Among The Best Frameworks In T
 
 **Prerequisites:** 
 
-* [Java 11](https://adoptopenjdk.net/)
+* [Java 11](https://adoptium.net/)
 
 > [Okta](https://developer.okta.com/) has Authentication and User Management APIs that reduce development time with instant-on, scalable user infrastructure. Okta's intuitive API and expert support make it easy for developers to authenticate, manage and secure users and roles in any application.
 
@@ -20,7 +20,7 @@ Please read [Java REST API Showdown: A Comparison Among The Best Frameworks In T
 To install this example application, run the following commands:
 
 ```bash
-git clone https://github.com/oktadeveloper/okta-java-rest-api-comparison-example.git
+git clone https://github.com/oktadev/okta-java-rest-api-comparison-example.git
 ```
 
 This will get a copy of the project locally. There are three folders: `micronaut`, `quarkus`, and `spring-boot`. 
