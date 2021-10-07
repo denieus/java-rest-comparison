@@ -1,6 +1,6 @@
 # Java REST API Showdown: A Comparison Among The Best Frameworks In The Market
 
-This example shows how to create Java REST APIs with Micronaut, Quarkus, and Spring Boot.
+This example shows how to create Java REST APIs with Micronaut, Quarkus, Helidon, and Spring Boot.
 
 Please read [Java REST API Showdown: A Comparison Among The Best Frameworks In The Market](https://developer.okta.com/blog/2020/01/09/java-rest-api-showdown) for a tutorial that shows you how to build each application.
 
@@ -34,6 +34,7 @@ Paste the value of `{yourOktaDomain}` into the following files:
 * `micronaut/src/main/resources/application.yml`
 * `quarkus/src/main/resources/application.properties`
 * `spring-boot/src/main/resources/application.properties`
+* `helidon/src/main/resources/META-INF/microprofile-config.properties`
 
 ### Start the application
 
@@ -42,6 +43,7 @@ To start each application you can use the commands below:
 * Micronaut: `./mvnw mn:run`
 * Quarkus: `./mvnw compile quarkus:dev`
 * Spring Boot: `./mvnw spring-boot:run`
+* Helidon: `helidon dev` (using Helidon CLI)
 
 ## Links
 
